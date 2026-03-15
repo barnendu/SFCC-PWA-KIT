@@ -1,0 +1,6 @@
+{
+  "name": "int_aci_custom",
+  "version": "1.0.0",
+  "description": "ACI Payments SFCC cartridge",
+  "private": true
+}

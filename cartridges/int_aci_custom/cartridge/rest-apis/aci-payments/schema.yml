@@ -1,0 +1,265 @@
+openapi: 3.0.0
+info:
+  title: ACI Payments
+  version: 1.0.0
+paths:
+  /checkout:
+    post:
+      operationId: createAciCheckoutId
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutCreateRequest'
+      responses:
+        '201':
+          description: Checkout created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutCreateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /checkouts/{checkoutId}/payment:
+    post:
+      operationId: submitAciPayment
+      parameters:
+        - name: checkoutId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '200':
+          description: Payment response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /query/{paymentId}:
+    get:
+      operationId: queryAciPayment
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: entityId
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Query response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    CheckoutCreateRequest:
+      type: object
+      additionalProperties: true
+    PaymentRequest:
+      type: object
+      additionalProperties: true
+    CheckoutCreateResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: string
+        ndc:
+          type: string
+        timestamp:
+          type: string
+        buildNumber:
+          type: string
+        result:
+          $ref: '#/components/schemas/Result'
+    PaymentResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: string
+        paymentType:
+          type: string
+        paymentBrand:
+          type: string
+        amount:
+          type: string
+        currency:
+          type: string
+        descriptor:
+          type: string
+        result:
+          $ref: '#/components/schemas/Result'
+        resultDetails:
+          $ref: '#/components/schemas/ResultDetails'
+        card:
+          $ref: '#/components/schemas/Card'
+        customParameters:
+          $ref: '#/components/schemas/CustomParameters'
+        risk:
+          $ref: '#/components/schemas/Risk'
+        buildNumber:
+          type: string
+        timestamp:
+          type: string
+        ndc:
+          type: string
+        source:
+          type: string
+        paymentMethod:
+          type: string
+        shortId:
+          type: string
+    QueryResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        result:
+          $ref: '#/components/schemas/Result'
+        buildNumber:
+          type: string
+        timestamp:
+          type: string
+        ndc:
+          type: string
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentRecord'
+    PaymentRecord:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: string
+        paymentType:
+          type: string
+        paymentBrand:
+          type: string
+        amount:
+          type: string
+        currency:
+          type: string
+        descriptor:
+          type: string
+        result:
+          $ref: '#/components/schemas/Result'
+        resultDetails:
+          $ref: '#/components/schemas/ResultDetails'
+        card:
+          $ref: '#/components/schemas/Card'
+        customParameters:
+          $ref: '#/components/schemas/CustomParameters'
+        risk:
+          $ref: '#/components/schemas/Risk'
+    Result:
+      type: object
+      additionalProperties: true
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+    ResultDetails:
+      type: object
+      additionalProperties: true
+      properties:
+        ExtendedDescription:
+          type: string
+        clearingInstituteName:
+          type: string
+        ConnectorTxID1:
+          type: string
+        ConnectorTxID2:
+          type: string
+        ConnectorTxID3:
+          type: string
+        AcquirerResponse:
+          type: string
+    Card:
+      type: object
+      additionalProperties: true
+      properties:
+        bin:
+          type: string
+        last4Digits:
+          type: string
+        holder:
+          type: string
+        expiryMonth:
+          type: string
+        expiryYear:
+          type: string
+        issuer:
+          $ref: '#/components/schemas/CardIssuer'
+        type:
+          type: string
+        level:
+          type: string
+        country:
+          type: string
+        maxPanLength:
+          type: string
+        binType:
+          type: string
+        regulatedFlag:
+          type: string
+    CardIssuer:
+      type: object
+      additionalProperties: true
+      properties:
+        bank:
+          type: string
+    CustomParameters:
+      type: object
+      additionalProperties: true
+      properties:
+        SHOPPER_EndToEndIdentity:
+          type: string
+        CTPE_DESCRIPTOR_TEMPLATE:
+          type: string
+    Risk:
+      type: object
+      additionalProperties: true
+      properties:
+        score:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+        message:
+          type: string
+        details:
+          additionalProperties: true

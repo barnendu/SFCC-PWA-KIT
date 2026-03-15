@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<preferences xmlns="http://www.demandware.com/xml/impex/preferences/2007-03-31">
+    <custom-preferences>
+        <custom-preference preference-id="ACI_BaseUrl" type="string"/>
+        <custom-preference preference-id="ACI_ApiPathPrefix" type="string"/>
+        <custom-preference preference-id="ACI_EntityId" type="string"/>
+        <custom-preference preference-id="ACI_AccessToken" type="string"/>
+        <custom-preference preference-id="ACI_AuthHeaderName" type="string"/>
+        <custom-preference preference-id="ACI_AuthScheme" type="string"/>
+    </custom-preferences>
+</preferences>

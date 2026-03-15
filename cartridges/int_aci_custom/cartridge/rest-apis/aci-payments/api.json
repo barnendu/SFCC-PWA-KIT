@@ -1,0 +1,22 @@
+{
+  "name": "aci-payments",
+  "description": "ACI Payments Custom API",
+  "version": "1.0.0",
+  "endpoints": [
+    {
+      "endpoint": "createAciCheckoutId",
+      "schema": "schema.yml",
+      "implementation": "script"
+    },
+    {
+      "endpoint": "submitAciPayment",
+      "schema": "schema.yml",
+      "implementation": "script"
+    },
+    {
+      "endpoint": "queryAciPayment",
+      "schema": "schema.yml",
+      "implementation": "script"
+    }
+  ]
+}
