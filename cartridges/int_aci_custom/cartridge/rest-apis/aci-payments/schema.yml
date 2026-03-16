@@ -3,7 +3,7 @@ info:
   title: ACI Payments
   version: 1.0.0
 paths:
-  /checkout:
+  /checkouts:
     post:
       operationId: createAciCheckoutId
       requestBody:
