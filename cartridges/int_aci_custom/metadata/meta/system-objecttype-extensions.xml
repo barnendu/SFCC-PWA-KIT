@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.demandware.com/xml/impex/metadata/2006-10-31">
+    <type-extension type-id="SitePreferences">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="ACI_BaseUrl">
+                <display-name xml:lang="x-default">ACI Base URL</display-name>
+                <description xml:lang="x-default">Base URL for the ACI API, for example https://eu-test.oppwa.com.</description>
+                <type>string</type>
+                <localizable-flag>false</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <visible-flag>true</visible-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="ACI_ApiPathPrefix">
+                <display-name xml:lang="x-default">ACI API Path Prefix</display-name>
+                <description xml:lang="x-default">Path prefix appended to the base URL before endpoint paths.</description>
+                <type>string</type>
+                <default-value>/v1</default-value>
+                <localizable-flag>false</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <visible-flag>true</visible-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="ACI_EntityId">
+                <display-name xml:lang="x-default">ACI Entity ID</display-name>
+                <description xml:lang="x-default">Entity ID sent with checkout, payment, and query requests.</description>
+                <type>string</type>
+                <localizable-flag>false</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <visible-flag>true</visible-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="ACI_AccessToken">
+                <display-name xml:lang="x-default">ACI Access Token</display-name>
+                <description xml:lang="x-default">Access token used for authenticating ACI API requests.</description>
+                <type>string</type>
+                <localizable-flag>false</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <visible-flag>true</visible-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="ACI_AuthHeaderName">
+                <display-name xml:lang="x-default">ACI Auth Header Name</display-name>
+                <description xml:lang="x-default">Header name used for API authentication.</description>
+                <type>string</type>
+                <default-value>Authorization</default-value>
+                <localizable-flag>false</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <visible-flag>true</visible-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="ACI_AuthScheme">
+                <display-name xml:lang="x-default">ACI Auth Scheme</display-name>
+                <description xml:lang="x-default">Authentication scheme prefix, for example Bearer.</description>
+                <type>string</type>
+                <default-value>Bearer</default-value>
+                <localizable-flag>false</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <visible-flag>true</visible-flag>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="ACIPayments">
+                <display-name xml:lang="x-default">ACI Payments</display-name>
+                <attribute attribute-id="ACI_BaseUrl"/>
+                <attribute attribute-id="ACI_ApiPathPrefix"/>
+                <attribute attribute-id="ACI_EntityId"/>
+                <attribute attribute-id="ACI_AccessToken"/>
+                <attribute attribute-id="ACI_AuthHeaderName"/>
+                <attribute attribute-id="ACI_AuthScheme"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
+</metadata>
