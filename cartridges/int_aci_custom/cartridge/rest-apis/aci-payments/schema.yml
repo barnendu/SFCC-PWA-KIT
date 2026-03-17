@@ -6,12 +6,12 @@ paths:
   /checkouts:
     post:
       operationId: createAciCheckoutId
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CheckoutCreateRequest'
+      parameters:
+        - name: basketId
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
         '201':
           description: Checkout created
@@ -82,9 +82,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    CheckoutCreateRequest:
-      type: object
-      additionalProperties: true
     PaymentRequest:
       type: object
       additionalProperties: true
