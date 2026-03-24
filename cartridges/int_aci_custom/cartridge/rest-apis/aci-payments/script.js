@@ -1,6 +1,7 @@
 'use strict';
 
 var BasketMgr = require('dw/order/BasketMgr');
+var RESTResponseMgr = require('dw/system/RESTResponseMgr');
 var aciClient = require('*/cartridge/scripts/aci/aciClient');
 
 function parseBody(request) {
@@ -24,21 +25,23 @@ function parseBody(request) {
 }
 
 function errorResponse(statusCode, message, details) {
-    return {
-        statusCode: statusCode,
-        body: {
-            error: true,
-            message: message,
-            details: details || null
-        }
-    };
+    var response = RESTResponseMgr.createError(
+        statusCode,
+        'aci-payments-error',
+        'ACI payments error',
+        message
+    );
+
+    response.custom.error = true;
+    if (details) {
+        response.custom.details = details;
+    }
+
+    return response.render();
 }
 
 function successResponse(statusCode, body) {
-    return {
-        statusCode: statusCode,
-        body: body || {}
-    };
+    return RESTResponseMgr.createSuccess(body || {}, statusCode);
 }
 
 function handleServiceResult(result, successStatus) {
@@ -52,6 +55,14 @@ function handleServiceResult(result, successStatus) {
 function getQueryParam(request, name) {
     if (request && request.queryParams && request.queryParams[name]) {
         return String(request.queryParams[name]);
+    }
+
+    return '';
+}
+
+function getPathParam(request, name) {
+    if (request && request.pathParams && request.pathParams[name]) {
+        return String(request.pathParams[name]);
     }
 
     return '';
@@ -143,7 +154,7 @@ exports.createAciCheckoutId = function (request) {
 };
 
 exports.submitAciPayment = function (request) {
-    var checkoutId = request && request.pathParams && request.pathParams.checkoutId;
+    var checkoutId = getPathParam(request, 'checkoutId');
     if (!checkoutId) {
         return errorResponse(400, 'Missing checkoutId in path.');
     }
@@ -158,7 +169,7 @@ exports.submitAciPayment = function (request) {
 };
 
 exports.queryAciPayment = function (request) {
-    var paymentId = request && request.pathParams && request.pathParams.paymentId;
+    var paymentId = getPathParam(request, 'paymentId');
     if (!paymentId) {
         return errorResponse(400, 'Missing paymentId in path.');
     }
@@ -167,3 +178,7 @@ exports.queryAciPayment = function (request) {
     var result = aciClient.queryPayment(String(paymentId), queryParams);
     return handleServiceResult(result, 200);
 };
+
+exports.createAciCheckoutId  = true;
+exports.submitAciPayment = true;
+exports.queryAciPayment = true;

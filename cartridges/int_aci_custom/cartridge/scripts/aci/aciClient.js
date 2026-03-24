@@ -22,8 +22,20 @@ function buildUrl(baseUrl, apiPathPrefix, path, queryParams) {
     return url + query;
 }
 
+function cloneValue(value) {
+    if (!value || typeof value !== 'object') {
+        return value;
+    }
+
+    if (Object.prototype.toString.call(value) === '[object Array]') {
+        return value.slice();
+    }
+
+    return Object.assign({}, value);
+}
+
 function withEntityId(payload, queryParams, entityId) {
-    var body = payload || null;
+    var body = payload ? cloneValue(payload) : null;
     var params = queryParams ? Object.assign({}, queryParams) : null;
 
     if (entityId) {
@@ -45,6 +57,38 @@ function withEntityId(payload, queryParams, entityId) {
     };
 }
 
+function hasEntityId(entityPack) {
+    return !!(
+        entityPack
+        && (
+            (entityPack.body && entityPack.body.entityId)
+            || (entityPack.params && entityPack.params.entityId)
+        )
+    );
+}
+
+function appendFormField(parts, key, value) {
+    if (value === null || typeof value === 'undefined' || value === '') {
+        return;
+    }
+
+    parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(String(value)));
+}
+
+function toFormBody(payload) {
+    if (!payload || typeof payload !== 'object') {
+        return null;
+    }
+
+    var keys = Object.keys(payload);
+    var parts = [];
+    for (var i = 0; i < keys.length; i += 1) {
+        appendFormField(parts, keys[i], payload[keys[i]]);
+    }
+
+    return parts.join('&');
+}
+
 var service = LocalServiceRegistry.createService('aci.http', {
     createRequest: function (svc, params) {
         svc.setRequestMethod(params.method);
@@ -62,8 +106,8 @@ var service = LocalServiceRegistry.createService('aci.http', {
         }
 
         if (params.body) {
-            svc.addHeader('Content-Type', 'application/json');
-            return JSON.stringify(params.body);
+            svc.addHeader('Content-Type', 'application/x-www-form-urlencoded');
+            return toFormBody(params.body);
         }
 
         return null;
@@ -111,6 +155,14 @@ function call(method, path, payload, queryParams) {
     }
 
     var entityPack = withEntityId(payload, queryParams, config.entityId);
+    if (!hasEntityId(entityPack)) {
+        return {
+            ok: false,
+            statusCode: 500,
+            errorMessage: 'ACI entityId is missing. Configure ACI_EntityId or pass entityId explicitly.'
+        };
+    }
+
     var url = buildUrl(config.baseUrl, config.apiPathPrefix, path, entityPack.params);
 
     var headers = {};
